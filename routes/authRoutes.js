@@ -1,12 +1,5 @@
 const passport = require('passport')
 
-var authCbPath=null;
-if(process.env.NODE_ENV === 'production'){
-    authCbPath='/auth20callback'
-}else{
-    authCbPath='/auth/google/callback'
-}
-
 module.exports = (app) => {
     app.get(
         '/auth/google',
@@ -16,7 +9,7 @@ module.exports = (app) => {
     );
 
     app.get(
-        authCbPath,
+        '/auth/google/callback',
         passport.authenticate('google')
     )
 
