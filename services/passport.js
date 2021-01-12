@@ -11,7 +11,7 @@ passport.serializeUser((user,done)=>{
 
 passport.deserializeUser(async (id, done)=>{
     try{
-        let userExist = await User.findById(id)
+        const userExist = await User.findById(id)
         done (null,userExist)
     }catch(err){
         done (err,null)
@@ -25,13 +25,12 @@ passport.use(new GoogleStrategy({
     proxy: true
 }, async (accessToken, refReshToken, profile, done) => {
     try{
-        let existingUser = await User.findOne({googleId: profile.id})
-        if(!existingUser.exists){
-            let user = await new User({googleId: profile.id}).save();
-            done(null, user)
-        } else {
-            done(null, existingUser)
-        }
+        const existingUser = await User.findOne({googleId: profile.id})
+        if(existingUser){
+            return done(null, existingUser)
+        } 
+        const user = await new User({googleId: profile.id}).save();
+        done(null, user)
         
     }catch(err){
         console.log(err)
